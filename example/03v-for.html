@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>v-for</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="../assets/js/vue.js"></script>
+</head>
+<body>
+    <h3>v-for案例</h3>
+    <hr>
+    <div id="app">
+        <ul>
+            <li v-for="(item,index) in sortItems" :key="index">
+                {{item}}
+            </li>
+        </ul>
+        <ul>
+            <li v-for="(student,index) in sortStudent" :key="index">
+                {{index}} - {{student.name}} - {{student.age}}
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        var app = new Vue({
+            el: '#app',
+            data: {
+                items:[20,23,8,65,32,19,54,56,41],
+                students:[
+                    {name:'jspang',age:32},
+                    {name:'Panda',age:30},
+                    {name:'PanPan',age:21},
+                    {name:'King',age:45},
+                ]
+            },
+            computed:{
+                sortItems:function(){
+                    return this.items.sort(this.sortNumber);
+                },
+                sortStudent: function(){
+                    return this.sortByKey(this.students,'age');
+                }
+            },
+            methods: {
+                sortNumber(a,b){
+                    return a - b;
+                },
+                sortByKey(array,key){
+                    return array.sort(function(a,b){
+                        var x = a[key];
+                        var y = b[key];
+                        return x-y;
+                    })
+                }
+            }
+        });
+    </script>
+</body>
+</html>
