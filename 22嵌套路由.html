@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="vue/vue.js"></script>
+    <script src="vue/vue-router.js"></script>
+    <script>
+        //1:router-view中包含router-view
+        //2:路有规则中存在子路由
+        Vue.use(VueRouter);
+        var Login = {
+            template: `
+                <div>
+                    <p>我是登录页面</p>  
+                    <router-view></router-view>  
+                </div>
+            `
+        };
+        var Woman = {
+            template: `
+                <div>woman</div>
+            `
+        }
+        var Register = {
+            template: `
+                <div>
+                    <p>我是注册页面</p>   
+                    <router-view></router-view> 
+                </div>
+            `
+        };
+        var App = {
+            template: `
+                <div>
+                    <router-link :to = "{
+                        name:'login.woman'
+                    }" tag="li">
+                        <a>登录子页面</a>
+                    </router-link>
+                    <router-view></router-view>    
+                </div>
+            `
+        };
+        var router = new VueRouter({
+            routes: [{
+                name: 'login',path: '/login',component:Login,
+                children: [{
+                    name: 'login.woman', path: 'woman', component:Woman
+                }]
+            },{
+                name: 'register',path:'/register',component: Register
+            }]
+        });
+        new Vue({
+            el: '#app',
+            router: router,
+            components:{
+                app: App
+            },
+            template: `
+                <app />
+            `
+        })
+    </script>
+</body>
+</html>

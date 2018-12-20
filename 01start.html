@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="text/javascript" src="./vue/vue.js"></script>
+    <script type="text/javascript">
+        new Vue({
+            //el发生行为的目的地 可以是类名或者标签名，也可以直接查找dom结构 document.getElementById("app") 这种vue不用在查找，占据内存，性能优化
+            el: "#app",
+            //template装在的模板
+            template: "<div><h5>开始 {{text}}</h5></div>",
+            //动态数据的声明
+            data: function(){//也可以使用对象
+                //template中要使用的数据
+                return {
+                    text: 'hello vue'
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

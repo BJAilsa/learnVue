@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="vue/vue.js"></script>
+    <script src="vue/axios.js"></script>
+    <script>
+        var App = {
+            template: `
+                <div>
+                    <button @click="sendAjax">测试options</button>    
+                </div>
+            `,
+            methods: {
+                sendAjax: function(){
+                    //请求一 get / 请求2 post /add
+                    //this.$axios.get || post(url,data,options)
+
+                    //配置公共数据
+                    this.$axios.defaults.baseURL = 'http://127.0.0.1:8888'
+                    
+                    //所有请求自带的头信息
+                    //覆盖原本默认头
+                    // this.$axios.headers = {
+
+                    // };
+                    //走默认头，修改个别
+                    this.$axios.defaults.headers.accept = 'abc';
+                    //请求1
+                    this.$axios.get('',{
+                        params:{id:1},
+                        //修改响应的数据
+                        transformResponse: function(data){
+                            data = 'change ' + data;
+                            return data;
+                        }
+                    })
+                    .then(res => {
+                        console.log(res);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+
+                    //请求2
+                    this.$axios.post('add','name=jack',{
+                        timeout: 1000,
+                        //加工请求体数据
+                        transformRequest: function(data){
+                            return 'name=rose';
+                        }
+                    })
+                    .then(res => {
+                        console.log(res);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+                }
+            }
+        }
+
+        //组件内的每一个this对象，都是Vue的孩子
+        //Vue祖宗的原型数据，会共享给每个孩子
+        Vue.prototype.$axios = axios;
+
+        new Vue({
+            el: '#app',
+            components:{
+                app: App
+            },
+            template: '<app/>'
+        })
+    </script>
+</body>
+</html>

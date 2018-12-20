@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="vue/vue.js"></script>
+    <script>
+        //在组件的dom部分，任意的标签中，写上ref="XXX"
+        //通过组件对象this.$refs.XXX 获取到元素
+
+        //子组件，供$refs获取
+        var TempComponent = {
+            template: `
+                <div>我是子组件</div>
+            `
+        }
+
+        Vue.component('temp',TempComponent);
+
+        var App = {
+            template: `
+                <div>
+                    <temp ref="tmp"/>
+                    <button ref="btn">按钮</button>    
+                </div>
+            `,
+            beforeCreate: function(){
+                //这里不能操作数据，只是初始化了事件
+                console.log(this.$refs.btn);
+            },
+            created: function(){
+                //可以操作数据了
+                console.log(this.$refs.btn);
+            },
+            beforeMount: function(){
+                //new Vue 发生装载 替换<div id="app">之前
+                console.log(this.$refs.btn);
+            },
+            //此处才能获取this.$refs
+            mounted: function(){
+                //装载之后，替换dom之后
+                console.log(this.$refs.btn);
+                console.log(this.$refs.tmp.$el);
+            }
+        }
+        new Vue({
+            el: '#app',
+            components: {
+                app: App
+            },
+            template: `<app/>`
+        });
+    </script>
+</body>
+</html>

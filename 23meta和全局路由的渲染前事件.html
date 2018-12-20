@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="vue/vue.js"></script>
+    <!--1:引入vue-router对象-->
+    <script src="vue/vue-router.js"></script>
+    <script>
+        var isLogin = false;
+        var Login = {
+            template: `
+                <div>我是登录页面</div>
+            `,
+            created: function(){
+                isLogin = true;
+            }
+        }
+        var Music = {
+            template: `
+                <div>我的音乐页面</div>
+            `
+        }
+
+        
+        //2:安装插件
+        Vue.use(VueRouter);
+
+
+        //3:创建一个路由对象
+        var router = new VueRouter();
+        //可以多次的追加路由规则，动态的获取路由规则。更为灵活，可以方便调用后追加路由规则
+        router.addRoutes([{
+            //默认首页路由
+            path: '/', redirect:{name:'login'}
+        },{
+            name: 'login',path:'/login',component: Login
+        },{
+            //meta:{isChecked:true}给未来路由的权限控制，全局路由守卫来做参照条件
+            name:'music',path:'/music',component: Music, meta:{
+                isChecked: true
+            }
+        }]);
+
+        router.beforeEach(function(to, from, next){
+            if(!to.meta.isChecked){
+                next();//不调用next()就会卡住
+            }else{
+                //音乐访问，需要判断是否登录
+                if(isLogin){
+                    next();
+                }else{
+                    alert("未登录");
+                    //重定向到login
+                    next({name:'login'});
+                }
+            } 
+        });
+        
+         //6:指定路由改变局部的位置
+         //<router-view> 组件是一个 functional 组件，渲染路径匹配到的视图组件
+        var App = {
+            template: `
+                <div>
+                    <router-link :to="{path:'login'}">登录</router-link>
+                    <router-link :to="{path:'music'}">去听歌</router-link>
+                    <router-view></router-view>    
+                </div>
+            `
+        }
+
+        //5:将配置好的路由对象关联到vue实例中
+        new Vue({
+            el: '#app',
+            router: router,//不加这一步，运行的时候报错Cannot read property 'matched' of undefined"
+            components: {
+                app: App
+            },
+            template: '<app/>'
+        })
+    </script>
+</body>
+</html>

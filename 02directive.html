@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="text/javascript" src="./vue/vue.js"></script>
+    <script type="text/javascript">
+    /**
+     * v-text inner-text
+     * v-html inner-html
+     * v-if 是否插入元素
+     * v-show 是否隐藏元素
+    */
+        new Vue({
+            el: '#app',
+            template: `
+                <!--必须有一个根节点-->
+                <div>
+                    <span v-text="myText"></span>
+                    <hr>
+                    <span v-html="myHtml"></span>
+                    <hr>
+                    <!-- v-if v-else-if v-else 必须是相邻的dom结构-->
+                    <button v-if="num === 1">测试v-if</button>
+                    <button v-else-if="num === 2">测试v-else-if</button>
+                    <button v-else>测试v-else</button>
+                    <hr>
+                    <button v-show="isShow">我是v-show</button>
+                </div>
+            `,
+            data: function(){
+                return {
+                    myText: '<h1>v-text</h1>',
+                    myHtml: '<h1>v-html</h1>',
+                    isExist: false,
+                    num: 2,
+                    isShow: false
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

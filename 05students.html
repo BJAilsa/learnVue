@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .a{
+            background-color: red;
+        }
+        .b{
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    <script type="text/javascript" src="vue/vue.js"></script>
+    <script type="text/javascript">
+        new Vue({
+            el:"#app",
+            template:`
+                <div>
+                    <ul>
+                        <li v-for="item in stus" :class="item.myClass">
+                            {{ item.name }}    
+                        </li>
+                    </ul>   
+                    <hr/>
+                    <ul>
+                        <li v-for="(val,key,index) in stus2">
+                            val:{{val}}
+                            key:{{key}}
+                            index:{{index}}
+                        </li>    
+                    </ul> 
+                </div>
+            `,
+            data: function(){
+                return {
+                    stus:[{name:'章三',myClass:'a'},{name:'李四',myClass:'b'},{name: '王五',myClass:'a'}],
+                    stus2:{'A':'章三','B':'李四','C':'王五'}
+                }
+            }
+        })
+    </script>
+</body>
+</html>

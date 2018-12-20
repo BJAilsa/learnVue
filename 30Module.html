@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      var vueComponent = {
+        name: "jack",
+        created: function() {
+            console.log(this);
+        },
+        created2() {
+          console.log(this);
+        },
+        //以上两者this指向一样，
+        created3: () => {
+          console.log(this);
+        }
+        //上面这个this会向上级function绑定
+      };
+      vueComponent.created();
+      vueComponent.created2();
+      vueComponent.created3();
+    </script>
+  </body>
+</html>

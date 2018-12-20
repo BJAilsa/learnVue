@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="vue/vue.js"></script>
+    <script src="vue/axios.js"></script>
+    <script>
+        var App = {
+            data: function(){
+                return {
+                    res1: {},
+                    res2: {}
+                }
+            },
+            template: `
+                <div>
+                    响应1:{{res1}}
+                    响应2:{{res2}}
+                    <button @click="sendAjax">合并请求</button>    
+                </div>
+            `,
+            methods: {
+                sendAjax: function(){
+                    //请求一 get / 请求2 post /add
+                    //this.$axios.get || post(url,data,options)
+
+                    //配置公共数据
+                    this.$axios.defaults.baseURL = 'http://127.0.0.1:8888'
+
+                    var q1 = axios.get('');
+                    var q2 = axios.post('/add','a=1');
+                    //合并请求并处理其成功失败
+                    axios.all([q1,q2])
+                    .then(axios.spread((res1,res2) => {
+                        //全成功执行
+                        this.res1 = res1.data;
+                        this.res2 = res2.data;
+                    }))
+                    .catch(err => {
+                        //任一失败或同时失败执行
+                        console.log(err);
+                    });
+                }
+            }
+        }
+
+        //组件内的每一个this对象，都是Vue的孩子
+        //Vue祖宗的原型数据，会共享给每个孩子
+        Vue.prototype.$axios = axios;
+
+        new Vue({
+            el: '#app',
+            components:{
+                app: App
+            },
+            template: '<app/>'
+        })
+    </script>
+</body>
+</html>

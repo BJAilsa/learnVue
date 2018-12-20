@@ -1,0 +1,13 @@
+node_modules
+build
+dist
+war
+temp
+tmp
+/.idea
+*.iml
+*.log
+*/.DS_Store
+.DS_Store
+.vscode
+package-lock.json

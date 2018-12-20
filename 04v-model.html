@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+</head>
+
+<body>
+    <div id="app"></div>
+    <script type="text/javascript" src="./vue/vue.js"></script>
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            template: `
+                <div>
+                   <input type="text" v-model="myValue"/>
+                   <button v-show="myValue=='ddd'">用户输入的是ddd</button>
+                </div>
+            `,
+            data: function(){
+                return {
+                    myValue: '绑定的值'
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

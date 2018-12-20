@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="vue/vue.js"></script>
+    <script src="vue/axios.js"></script>
+    <script>
+        var App = {
+            data: function(){
+                return {
+                    file: [],
+                    rate: 0,
+                    source: '',
+                    loaded: 0
+                }
+            },
+            template: `
+                <div>
+                    上传进度：{{rate}}%
+                    选择文件：<input type="file" name="file" @change="changeFile"/>
+                    <button @click="sendAjax">发请求</button>
+                    <button @click="cancel">取消请求</button>  
+                    <button @click="resume">继续传递</button> 
+                </div>
+            `,
+            methods: {
+                sendAjax: function(){
+                    var fd = new FormData();
+                    fd.append('file',this.file);
+                    this.requestMethod(fd);
+                },
+                cancel: function(){
+                    this.source.cancel();
+                },
+                resume: function(){
+                    //剪裁文件
+                    var fileData = this.file.slice(this.loaded+1,this.file.size);
+
+                    var fd = new FormData();
+                    fd.append('file',fileData);
+
+                    this.requestMethod(fd);
+                },
+                changeFile: function(e){
+                    this.file = e.target.files[0];
+                },
+                requestMethod: function(fd){
+                    console.log(fd);
+                    const CancelToken = axios.CancelToken;
+                    const source = CancelToken.source();
+                    this.source = source;
+
+                    this.$axios.defaults.baseURL = 'http://127.0.0.1:8888';
+
+                    //注：参数传fd之后，上传完会重新刷新打开页面，网速调慢之后，可以看到有很多canceled的当前网址的请求
+                    //   不选择文件直接点击发请求不会报错也不会刷新页面
+                    //   上传文件内容为空也不会报错和刷新页面，文件中只要有一个字，就会刷新
+                    //   应该是server.js中有问题
+
+                    this.$axios.post('/upload', fd, {
+                        //携带取消标识
+                        cancelToken: source.token,
+                        onUploadProgress: (progressEvent) => {
+                            this.loaded = progressEvent.loaded;
+                            this.rate = (progressEvent.loaded / progressEvent.total)*100;
+                        }
+                    });
+                }
+            }
+        }
+
+        Vue.prototype.$axios = axios;
+
+        new Vue({
+            el: '#app',
+            components:{
+                app: App
+            },
+            template: '<app/>'
+        })
+    </script>
+</body>
+</html>
